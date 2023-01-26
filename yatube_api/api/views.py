@@ -1,11 +1,11 @@
 from rest_framework import viewsets
-from rest_framework import mixins
 from rest_framework.pagination import LimitOffsetPagination
 from rest_framework.filters import SearchFilter
 from rest_framework.permissions import (IsAuthenticated,
                                         IsAuthenticatedOrReadOnly)
 
 from posts.models import Comment, Group, Post
+from .mixins import CrearOrReadMixin
 from .permissions import IsOwnerOrReadOnly
 from .serializers import (CommentsSerializer,
                           FollowSerializer,
@@ -13,13 +13,11 @@ from .serializers import (CommentsSerializer,
                           PostSerializer,)
 
 
-class FollowViewSet(mixins.CreateModelMixin,
-                    mixins.ListModelMixin,
-                    viewsets.GenericViewSet):
+class FollowViewSet(CrearOrReadMixin):
     permission_classes = (IsAuthenticated, )
     serializer_class = FollowSerializer
     filter_backends = (SearchFilter, )
-    search_fields = ('following__username', )
+    search_fields = ('=following__username', )
 
     def perform_create(self, serializer):
         if serializer.is_valid():
