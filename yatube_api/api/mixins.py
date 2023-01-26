@@ -6,5 +6,5 @@ class CrearOrReadMixin(
     mixins.CreateModelMixin,
     mixins.ListModelMixin,
     viewsets.GenericViewSet
-    ):
+):
     pass
